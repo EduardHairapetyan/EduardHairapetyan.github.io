@@ -71,9 +71,6 @@
  */
 async function qtLoad(config)
 {
-    // Disable console.log to turn off logging
-    console.log = function() {};
-
     const throwIfEnvUsedButNotExported = (instance, config) =>
     {
         const environment = config.qt.environment;
@@ -213,20 +210,100 @@ async function qtLoad(config)
     }
 
     const originalOnAbort = config.onAbort;
-    config.onAbort = () => {
+    config.onAbort = text =>
+    {
         originalOnAbort?.();
+        
         if (!onExitCalled) {
             onExitCalled = true;
             config.qt.onExit?.({
-                code: null,
-                crashed: true,
-                text: 'Application aborted'
+                text,
+                crashed: true
             });
+        }
+    };
+
+    // Call app/emscripten module entry function. It may either come from the emscripten
+    // runtime script or be customized as needed.
+    let instance;
+    try {
+        instance = await Promise.race(
+            [circuitBreaker, config.qt.entryFunction(config)]);
+
+        // Call main after creating the instance. We've opted into manually
+        // calling main() by setting noInitialRun in the config. Thie Works around
+        // issue where Emscripten suppresses all exceptions thrown during main.
+        if (!originalNoInitialRun)
+            instance.callMain(originalArguments);
+    } catch (e) {
+        // If this is the exception thrown by app.exec() then that is a normal
+        // case and we suppress it.
+        if (e == "unwind") // not much to go on
+            return;
+
+        if (!onExitCalled) {
+            onExitCalled = true;
+            config.qt.onExit?.({
+                text: e.message,
+                crashed: true
+            });
+        }
+        throw e;
+    }
+
+    return instance;
+}
+
+// Compatibility API. This API is deprecated,
+// and will be removed in a future version of Qt.
+function QtLoader(qtConfig) {
+
+    const warning = 'Warning: The QtLoader API is deprecated and will be removed in ' +
+                    'a future version of Qt. Please port to the new qtLoad() API.';
+    console.warn(warning);
+
+    let emscriptenConfig = qtConfig.moduleConfig || {}
+    qtConfig.moduleConfig = undefined;
+    const showLoader = qtConfig.showLoader;
+    qtConfig.showLoader = undefined;
+    const showError = qtConfig.showError;
+    qtConfig.showError = undefined;
+    const showExit = qtConfig.showExit;
+    qtConfig.showExit = undefined;
+    const showCanvas = qtConfig.showCanvas;
+    qtConfig.showCanvas = undefined;
+    if (qtConfig.canvasElements) {
+        qtConfig.containerElements = qtConfig.canvasElements
+        qtConfig.canvasElements = undefined;
+    } else {
+        qtConfig.containerElements = qtConfig.containerElements;
+        qtConfig.containerElements = undefined;
+    }
+    emscriptenConfig.qt = qtConfig;
+
+    let qtloader = {
+        exitCode: undefined,
+        exitText: "",
+        loadEmscriptenModule: _name => {
+            try {
+                qtLoad(emscriptenConfig);
+            } catch (e) {
+                showError?.(e.message);
+            }
         }
     }
 
-    const module = await config.qt.entryFunction(config);
-    await circuitBreaker;
+    qtConfig.onLoaded = () => {
+        showCanvas?.();
+    }
 
-    return module;
-}
+    qtConfig.onExit = exit => {
+        qtloader.exitCode = exit.code
+        qtloader.exitText = exit.text;
+        showExit?.();
+    }
+
+    showLoader?.("Loading");
+
+    return qtloader;
+};
