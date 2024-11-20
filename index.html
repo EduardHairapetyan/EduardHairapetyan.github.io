@@ -6,12 +6,14 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 <!doctype html>
 <html lang="en-us">
   <head>
+    <!-- Cross-Origin Opener Policy and Cross-Origin Embedder Policy headers -->
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
+
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
-    <!--Set visual viewport size for mobile devices to the device size,
-        witch results in a scale of 1 and a 1:1 mapping between CSS pixels
-        and Qt device independent pixels. -->
+    
+    <!-- Viewport settings for mobile optimization -->
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=0"/>
 
     <title>GameQT</title>
@@ -22,57 +24,61 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
     </style>
   </head>
   <body onload="init()">
+    <!-- Loading spinner and status while the app is loading -->
     <figure style="overflow:visible;" id="qtspinner">
       <center style="margin-top:1.5em; line-height:150%">
-        <img src="qtlogo.svg" width="320" height="200" style="display:block"></img>
+        <img src="qtlogo.svg" width="320" height="200" style="display:block" alt="Qt Logo">
         <strong>Qt for WebAssembly: GameQT</strong>
         <div id="qtstatus"></div>
         <noscript>JavaScript is disabled. Please enable JavaScript to use this application.</noscript>
       </center>
     </figure>
+    
+    <!-- Main screen for the Qt application -->
     <div id="screen"></div>
 
     <script type="text/javascript">
-        async function init()
-        {
-            const spinner = document.querySelector('#qtspinner');
-            const screen = document.querySelector('#screen');
-            const status = document.querySelector('#qtstatus');
+      // Initialize the game
+      async function init() {
+        const spinner = document.querySelector('#qtspinner');
+        const screen = document.querySelector('#screen');
+        const status = document.querySelector('#qtstatus');
 
-            const showUi = (ui) => {
-                [spinner, screen].forEach(element => element.style.display = 'none');
-                if (screen === ui)
-                    screen.style.position = 'default';
-                ui.style.display = 'block';
-            }
-
-            try {
-                showUi(spinner);
-                status.innerHTML = 'Loading...';
-
-                const instance = await qtLoad({
-                    qt: {
-                        onLoaded: () => showUi(screen),
-                        onExit: exitData =>
-                        {
-                            status.innerHTML = 'Application exit';
-                            status.innerHTML +=
-                                exitData.code !== undefined ? ` with code ${exitData.code}` : '';
-                            status.innerHTML +=
-                                exitData.text !== undefined ? ` (${exitData.text})` : '';
-                            showUi(spinner);
-                        },
-                        entryFunction: window.GameQT_entry,
-                        containerElements: [screen],
-                        
-                    }
-                });
-            } catch (e) {
-                console.error(e);
-                console.error(e.stack);
-            }
+        const showUi = (ui) => {
+          // Hide both the spinner and screen elements
+          [spinner, screen].forEach(element => element.style.display = 'none');
+          if (screen === ui)
+            screen.style.position = 'default';
+          ui.style.display = 'block';
         }
+
+        try {
+          // Show the loading spinner first
+          showUi(spinner);
+          status.innerHTML = 'Loading...';
+
+          // Load the Qt application
+          const instance = await qtLoad({
+            qt: {
+              onLoaded: () => showUi(screen),
+              onExit: exitData => {
+                status.innerHTML = 'Application exit';
+                status.innerHTML += exitData.code !== undefined ? ` with code ${exitData.code}` : '';
+                status.innerHTML += exitData.text !== undefined ? ` (${exitData.text})` : '';
+                showUi(spinner);
+              },
+              entryFunction: window.GameQT_entry,  // Ensure this matches the correct entry function
+              containerElements: [screen],
+            }
+          });
+        } catch (e) {
+          console.error(e);
+          console.error(e.stack);
+        }
+      }
     </script>
+
+    <!-- Loading the required scripts -->
     <script src="GameQT.js"></script>
     <script type="text/javascript" src="qtloader.js"></script>
   </body>
