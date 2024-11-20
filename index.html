@@ -35,6 +35,7 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
     <script type="text/javascript">
         async function init()
         {
+            console.log = function() {};
             const spinner = document.querySelector('#qtspinner');
             const screen = document.querySelector('#screen');
             const status = document.querySelector('#qtstatus');
