@@ -35,7 +35,6 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
     <script type="text/javascript">
         async function init()
         {
-            console.log = function() {};
             const spinner = document.querySelector('#qtspinner');
             const screen = document.querySelector('#screen');
             const status = document.querySelector('#qtstatus');
@@ -58,9 +57,9 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
                         {
                             status.innerHTML = 'Application exit';
                             status.innerHTML +=
-                                exitData.code !== undefined ?  with code ${exitData.code} : '';
+                                exitData.code !== undefined ? ` with code ${exitData.code}` : '';
                             status.innerHTML +=
-                                exitData.text !== undefined ?  (${exitData.text}) : '';
+                                exitData.text !== undefined ? ` (${exitData.text})` : '';
                             showUi(spinner);
                         },
                         entryFunction: window.GameQT_entry,
@@ -77,4 +76,4 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
     <script src="GameQT.js"></script>
     <script type="text/javascript" src="qtloader.js"></script>
   </body>
-</html>  
+</html>
