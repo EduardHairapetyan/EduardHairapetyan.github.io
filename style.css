@@ -1237,46 +1237,45 @@ footer .copyright {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    height: 100vh; /* Full viewport height */
-    padding: 20px; /* Add padding to prevent items from touching the edges */
+    height: 100vh; 
+    padding: 20px; 
 }
 
 .carousel {
     display: grid;
     perspective: 1000px;
-    width: 50vw; /* Use viewport width to scale carousel size */
-    height: 50vw; /* Adjust the height dynamically */
-    max-width: 600px; /* Set a maximum width */
-    max-height: 600px; /* Set a maximum height */
+    width: 50vw; 
+    height: 50vw;
+    max-width: 600px;
+    max-height: 600px;
     position: relative;
-    transform: translateX(20vw); /* Translate carousel to the right */
+    transform: translateX(20vw);
 }
 
-/* Media Queries for Mobile Devices */
 @media (max-width: 768px) {
     .carousel {
-        width: 70vw; /* Adjust carousel width for tablets */
+        width: 70vw;
         height: 70vw;
-        transform: translateX(15vw); /* Adjust translation */
+        transform: translateX(15vw); 
     }
 }
 
 @media (max-width: 480px) {
     .carousel {
-        width: 90vw; /* Adjust carousel size for mobile */
+        width: 90vw; 
         height: 90vw;
-        transform: translateX(10vw); /* Adjust translation */
+        transform: translateX(10vw); 
     }
 
     .carousel__item {
-        width: 25vw; /* Make items larger on mobile */
-        height: 25vw; /* Adjust height accordingly */
-        max-width: none; /* Remove max-width restriction */
-        max-height: none; /* Remove max-height restriction */
+        width: 25vw;  
+        height: 25vw;
+        max-width: none; 
+        max-height: none; 
     }
 
     .carousel__text {
-        font-size: 3vw; /* Make text size larger for mobile */
+        font-size: 3vw; 
     }
 }
 
@@ -1290,14 +1289,14 @@ footer .copyright {
 
 .carousel__item {
     position: absolute;
-    width: 25vw; /* Adjust item size dynamically */
+    width: 25vw; 
     height: 25vw;
-    max-width: 120px; /* Ensure items don't get too big */
-    max-height: 120px; /* Ensure items don't get too big */
+    max-width: 120px;
+    max-height: 120px; 
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    background-color: rgba(255, 255, 255, 0.8); 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     display: flex;
@@ -1324,23 +1323,22 @@ footer .copyright {
 }
 
 .carousel__text {
-    font-size: 1vw; /* Default size for desktops */
+    font-size: 1vw; 
 }
 
-@media (max-width: 768px) { /* Tablets */
+@media (max-width: 768px) { 
     .carousel__text {
-        font-size: 3vw; /* Larger text for tablets */
+        font-size: 3vw; 
     }
 }
 
 @media (max-width: 480px) { /* Mobile devices */
     .carousel__text {
-        font-size: 5vw; /* Much larger text for smaller screens */
+        font-size: 4vw; 
     }
 }
 
 
-/* Position each item in a circular layout */
 .carousel__item:nth-child(1) {
     transform: rotateY(0deg) translateZ(250px);
 }
