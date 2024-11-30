@@ -1290,8 +1290,8 @@ footer .copyright {
 
 .carousel__item {
     position: absolute;
-    width: 15vw; /* Adjust item size dynamically */
-    height: 15vw;
+    width: 25vw; /* Adjust item size dynamically */
+    height: 25vw;
     max-width: 120px; /* Ensure items don't get too big */
     max-height: 120px; /* Ensure items don't get too big */
     top: 50%;
@@ -1350,4 +1350,3 @@ footer .copyright {
         transform: rotateY(360deg);
     }
 }
-
