@@ -1317,7 +1317,7 @@ footer .copyright {
     bottom: 5%;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 1vw; /* Scalable text size */
+    font-size: clamp(12px, 2vw, 18px); ; /* Scalable text size */
     font-weight: bold;
     color: #000000;
     text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.6);
