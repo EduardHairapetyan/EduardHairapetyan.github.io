@@ -1317,12 +1317,28 @@ footer .copyright {
     bottom: 5%;
     left: 50%;
     transform: translateX(-50%);
-    font-size: clamp(15px, 2vw, 18px); ; /* Scalable text size */
     font-weight: bold;
     color: #000000;
     text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.6);
     z-index: 10;
 }
+
+.carousel__text {
+    font-size: 1vw; /* Default size for desktops */
+}
+
+@media (max-width: 768px) { /* Tablets */
+    .carousel__text {
+        font-size: 3vw; /* Larger text for tablets */
+    }
+}
+
+@media (max-width: 480px) { /* Mobile devices */
+    .carousel__text {
+        font-size: 5vw; /* Much larger text for smaller screens */
+    }
+}
+
 
 /* Position each item in a circular layout */
 .carousel__item:nth-child(1) {
