@@ -1267,6 +1267,17 @@ footer .copyright {
         height: 90vw;
         transform: translateX(10vw); /* Adjust translation */
     }
+
+    .carousel__item {
+        width: 25vw; /* Make items larger on mobile */
+        height: 25vw; /* Adjust height accordingly */
+        max-width: none; /* Remove max-width restriction */
+        max-height: none; /* Remove max-height restriction */
+    }
+
+    .carousel__text {
+        font-size: 3vw; /* Make text size larger for mobile */
+    }
 }
 
 .carousel__container {
@@ -1339,3 +1350,4 @@ footer .copyright {
         transform: rotateY(360deg);
     }
 }
+
